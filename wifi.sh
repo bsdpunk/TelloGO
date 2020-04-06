@@ -31,4 +31,5 @@ sudo nmcli device wifi connect $TELLO
 sudo dhclient $WLAN
 #./main &
 #./video &
-./minus ~/Downloads/res10_300x300_ssd_iter_140000.caffemodel ~/Downloads/deploy.prototxt
+#./minus ~/Downloads/res10_300x300_ssd_iter_140000.caffemodel ~/Downloads/deploy.prototxt
+./key ~/Downloads/res10_300x300_ssd_iter_140000.caffemodel ~/Downloads/deploy.prototxt
