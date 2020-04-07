@@ -68,16 +68,16 @@ func Work() {
 
 		if key.Key == keyboard.W {
 			fmt.Println("W pressed!")
-			drone.Forward(10)
+			drone.Forward(20)
 		} else if key.Key == keyboard.S {
 			fmt.Println("S")
-			drone.Backward(10)
+			drone.Backward(20)
 		} else if key.Key == keyboard.A {
 			fmt.Println("a")
-			drone.Left(10)
+			drone.Left(20)
 		} else if key.Key == keyboard.D {
 			fmt.Println("d")
-			drone.Backward(10)
+			drone.Backward(20)
 		} else if key.Key == keyboard.T {
 			fmt.Println("T")
 			drone.TakeOff()
@@ -100,6 +100,37 @@ func init() {
 	go func() {
 		// process joystick events
 		//	handleJoystick()
+		keys := keyboard.NewDriver()
+
+		work := func() {
+
+			keys.On(keyboard.Key, func(data interface{}) {
+				key := data.(keyboard.KeyEvent)
+
+				if key.Key == keyboard.W {
+					fmt.Println("W pressed!")
+					drone.Forward(10)
+				} else if key.Key == keyboard.S {
+					fmt.Println("S")
+					drone.Backward(10)
+				} else if key.Key == keyboard.A {
+					fmt.Println("a")
+					drone.Left(10)
+				} else if key.Key == keyboard.D {
+					fmt.Println("d")
+					drone.Backward(10)
+				} else if key.Key == keyboard.T {
+					fmt.Println("T")
+					drone.TakeOff()
+				} else if key.Key == keyboard.L {
+					fmt.Println("L")
+					drone.Land()
+
+				} else {
+					fmt.Println("keyboard event!", key, key.Char)
+				}
+			})
+		}
 
 		if err := ffmpeg.Start(); err != nil {
 			fmt.Println(err)
@@ -130,7 +161,8 @@ func init() {
 
 		robot := gobot.NewRobot("tello",
 			[]gobot.Connection{},
-			[]gobot.Device{drone},
+			[]gobot.Device{keys, drone},
+			work,
 		)
 
 		robot.Start()
