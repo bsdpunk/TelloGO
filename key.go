@@ -60,6 +60,15 @@ var (
 //	leftX, leftY, rightX, rightY atomic.Value
 )
 
+func resetDronePostion(drone *tello.Driver) {
+	drone.Forward(0)
+	drone.Backward(0)
+	drone.Up(0)
+	drone.Down(0)
+	drone.Left(0)
+	drone.Right(0)
+	drone.Clockwise(0)
+}
 func Work() {
 	keys := keyboard.NewDriver()
 
@@ -103,34 +112,77 @@ func init() {
 		keys := keyboard.NewDriver()
 
 		work := func() {
-
 			keys.On(keyboard.Key, func(data interface{}) {
 				key := data.(keyboard.KeyEvent)
-
-				if key.Key == keyboard.W {
-					fmt.Println("W pressed!")
-					drone.Forward(10)
-				} else if key.Key == keyboard.S {
-					fmt.Println("S")
-					drone.Backward(10)
-				} else if key.Key == keyboard.A {
-					fmt.Println("a")
-					drone.Left(10)
-				} else if key.Key == keyboard.D {
-					fmt.Println("d")
-					drone.Backward(10)
-				} else if key.Key == keyboard.T {
-					fmt.Println("T")
-					drone.TakeOff()
-				} else if key.Key == keyboard.L {
-					fmt.Println("L")
+				switch key.Key {
+				case keyboard.A:
+					fmt.Println(key.Char)
+					drone.Clockwise(-25)
+				case keyboard.D:
+					fmt.Println(key.Char)
+					drone.Clockwise(25)
+				case keyboard.W:
+					fmt.Println(key.Char)
+					drone.Forward(20)
+				case keyboard.S:
+					fmt.Println(key.Char)
+					drone.Backward(20)
+				case keyboard.K:
+					fmt.Println(key.Char)
+					drone.Down(20)
+				case keyboard.J:
+					fmt.Println(key.Char)
+					drone.Up(20)
+				case keyboard.Q:
+					fmt.Println(key.Char)
 					drone.Land()
-
-				} else {
-					fmt.Println("keyboard event!", key, key.Char)
+				case keyboard.P:
+					fmt.Println(key.Char)
+					drone.TakeOff()
+				case keyboard.ArrowUp:
+					fmt.Println(key.Char)
+					drone.FrontFlip()
+				case keyboard.ArrowDown:
+					fmt.Println(key.Char)
+					drone.BackFlip()
+				case keyboard.ArrowLeft:
+					fmt.Println(key.Char)
+					drone.LeftFlip()
+				case keyboard.ArrowRight:
+					fmt.Println(key.Char)
+					drone.RightFlip()
+				case keyboard.Escape:
+					resetDronePostion(drone)
 				}
 			})
 		}
+		//			keys.On(keyboard.Key, func(data interface{}) {
+		//				key := data.(keyboard.KeyEvent)
+		//
+		//				if key.Key == keyboard.W {
+		//					fmt.Println("W pressed!")
+		//					drone.Forward(10)
+		//				} else if key.Key == keyboard.S {
+		//					fmt.Println("S")
+		//					drone.Backward(10)
+		//				} else if key.Key == keyboard.A {
+		//					fmt.Println("a")
+		//					drone.Left(10)
+		//				} else if key.Key == keyboard.D {
+		//					fmt.Println("d")
+		//					drone.Backward(10)
+		//				} else if key.Key == keyboard.T {
+		//					fmt.Println("T")
+		//					drone.TakeOff()
+		//				} else if key.Key == keyboard.L {
+		//					fmt.Println("L")
+		//					drone.Land()
+		//
+		//				} else {
+		//					fmt.Println("keyboard event!", key, key.Char)
+		//				}
+		//			})
+		//		}
 
 		if err := ffmpeg.Start(); err != nil {
 			fmt.Println(err)
@@ -218,9 +270,6 @@ func main() {
 		if window.WaitKey(10) >= 0 {
 			break
 		}
-		//		fmt.Println("Work")
-		//		Work()
-		//		fmt.Println("Done")
 		if takeoff == 0 {
 			drone.TakeOff()
 			takeoff = 1
