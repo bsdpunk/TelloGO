@@ -33,7 +33,7 @@ const (
 var (
 	// ffmpeg command to decode video stream from drone
 	ffmpeg = exec.Command("ffmpeg", "-hwaccel", "auto", "-hwaccel_device", "opencl", "-i", "pipe:0",
-		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1")
+		"-pix_fmt", "bgr24", "-s", strconv.Itoa(frameX)+"x"+strconv.Itoa(frameY), "-f", "rawvideo", "pipe:1", "-vcodec", "copy", "-f", "flv", "this.flv")
 	ffmpegIn, _  = ffmpeg.StdinPipe()
 	ffmpegOut, _ = ffmpeg.StdoutPipe()
 
