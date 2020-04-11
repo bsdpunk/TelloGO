@@ -69,36 +69,6 @@ func resetDronePostion(drone *tello.Driver) {
 	drone.Right(0)
 	drone.Clockwise(0)
 }
-func Work() {
-	keys := keyboard.NewDriver()
-
-	keys.On(keyboard.Key, func(data interface{}) {
-		key := data.(keyboard.KeyEvent)
-
-		if key.Key == keyboard.W {
-			fmt.Println("W pressed!")
-			drone.Forward(20)
-		} else if key.Key == keyboard.S {
-			fmt.Println("S")
-			drone.Backward(20)
-		} else if key.Key == keyboard.A {
-			fmt.Println("a")
-			drone.Left(20)
-		} else if key.Key == keyboard.D {
-			fmt.Println("d")
-			drone.Backward(20)
-		} else if key.Key == keyboard.T {
-			fmt.Println("T")
-			drone.TakeOff()
-		} else if key.Key == keyboard.L {
-			fmt.Println("L")
-			drone.Land()
-
-		} else {
-			fmt.Println("keyboard event!", key, key.Char)
-		}
-	})
-}
 func init() {
 	//leftX.Store(float64(0.0))
 	//leftY.Store(float64(0.0))
@@ -156,33 +126,6 @@ func init() {
 				}
 			})
 		}
-		//			keys.On(keyboard.Key, func(data interface{}) {
-		//				key := data.(keyboard.KeyEvent)
-		//
-		//				if key.Key == keyboard.W {
-		//					fmt.Println("W pressed!")
-		//					drone.Forward(10)
-		//				} else if key.Key == keyboard.S {
-		//					fmt.Println("S")
-		//					drone.Backward(10)
-		//				} else if key.Key == keyboard.A {
-		//					fmt.Println("a")
-		//					drone.Left(10)
-		//				} else if key.Key == keyboard.D {
-		//					fmt.Println("d")
-		//					drone.Backward(10)
-		//				} else if key.Key == keyboard.T {
-		//					fmt.Println("T")
-		//					drone.TakeOff()
-		//				} else if key.Key == keyboard.L {
-		//					fmt.Println("L")
-		//					drone.Land()
-		//
-		//				} else {
-		//					fmt.Println("keyboard event!", key, key.Char)
-		//				}
-		//			})
-		//		}
 
 		if err := ffmpeg.Start(); err != nil {
 			fmt.Println(err)
@@ -249,8 +192,8 @@ func main() {
 	defer net.Close()
 	net.SetPreferableBackend(gocv.NetBackendType(backend))
 	net.SetPreferableTarget(gocv.NetTargetType(target))
-	var takeoff int
-	takeoff = 0
+	//var takeoff int
+	//takeoff = 0
 	defer drone.Land()
 	for {
 		// get next frame from stream
@@ -270,10 +213,10 @@ func main() {
 		if window.WaitKey(10) >= 0 {
 			break
 		}
-		if takeoff == 0 {
-			drone.TakeOff()
-			takeoff = 1
-		}
+		//if takeoff == 0 {
+		//	drone.TakeOff()
+		//	takeoff = 1
+		//}
 	}
 }
 
